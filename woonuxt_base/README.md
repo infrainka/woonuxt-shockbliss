@@ -20,7 +20,7 @@ This is the **WooNuxt parent layer** :the storefront engine (pages, components, 
 | `app/plugins/` | Nuxt plugins: auth/session bootstrap (`init.ts`, `gql-auth.ts`) and payment gateway registrations (`payment-gateways/`) |
 | `app/app.config.ts` | Store-facing config: branding, `storeSettings` feature flags (cart mode, badges, reviews, etc.) |
 | `modules/woonuxt-bridge.ts` | Nuxt module that validates required env vars and pulls WooNuxt Settings (branding, colors, Stripe config, SEO) from WordPress at build/runtime |
-| `i18n/locales/` | Translation JSON files. Only `fi-FI` and `en-US` are actually registered in `nuxt.config.ts`; the rest exist but aren't wired up |
+| `i18n/locales/` | Translation JSON files. Only `fi-FI` is actually registered in `nuxt.config.ts`; the rest (including `en-US`) exist but are disabled/not wired up |
 | `nuxt.config.ts` | Base layer config: modules, plugins, route rules (ISR for catalog routes), aliases, i18n setup |
 
 ## Key subsystems
@@ -49,7 +49,7 @@ Multilingual via `@nuxtjs/i18n`, `no_prefix` strategy. Default locale is `fi_FI`
 
 ## Site-specific fork
 
-This is the customized Alttari web shop. Changes are made directly in this layer. For the original, unmodified base, see the [upstream woonuxt repo](https://github.com/scottyzen/woonuxt).
+This layer powers the Shockbliss web shop. It started as a fork of the [upstream woonuxt repo](https://github.com/scottyzen/woonuxt), but **site-specific branding, copy, and customizations are made in the root `app/` directory** and `i18n/locales/` instead (see the root [README.md](../README.md#project-layout)), so this layer can still be updated from upstream without losing Shockbliss-specific changes.
 
 ## Related docs
 
