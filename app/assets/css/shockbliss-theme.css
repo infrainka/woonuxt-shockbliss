@@ -1,0 +1,94 @@
+/* Shockbliss brand theme — ported from the Angular app's look (styles.scss / app.component.scss) */
+
+@theme {
+  --color-shock-gold: #e6af4b;
+  --color-shock-pink: #fe019a;
+  --color-shock-purple: #bc13fe;
+  --color-shock-glow: #9d00ff;
+  --color-shock-violet: #973be8;
+}
+
+html,
+body {
+  background-color: #000;
+  color: #fff;
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Righteous', cursive;
+  color: var(--color-shock-gold);
+}
+
+/* Gold shine animation, matches the Angular h1 treatment */
+h1 {
+  background-image: linear-gradient(
+    45deg,
+    #996515 0%,
+    #ffc125 20%,
+    #ffd700 35%,
+    #ffbf00 50%,
+    #ffd700 65%,
+    #ffc125 80%,
+    #996515 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: 3px 3px 6px rgba(70, 70, 70, 0.6);
+  animation: shock-shine 2s linear infinite;
+}
+
+@keyframes shock-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shock-float {
+  0% {
+    transform: translateY(0px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: translateY(-20px);
+    box-shadow: 0 25px 15px rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    transform: translateY(0px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.shock-float {
+  animation: shock-float 6s ease-in-out infinite;
+}
+
+/* Neon link/button treatment used across header, footer and menus */
+.shock-neon-link {
+  color: var(--color-shock-purple);
+  text-shadow: 0 0 5px var(--color-shock-glow), 0 0 10px var(--color-shock-glow);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.shock-neon-link:hover {
+  color: var(--color-shock-gold);
+  text-shadow: 0 0 6px var(--color-shock-gold), 0 0 14px var(--color-shock-gold);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px;
+    text-shadow: 2px 2px 4px rgba(70, 70, 70, 0.6);
+    animation: shock-shine 3s linear infinite;
+  }
+}
