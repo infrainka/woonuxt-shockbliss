@@ -10,6 +10,16 @@ const [{ data }, { data: productData }] = await Promise.all([
 const productCategories = data.value?.productCategories?.nodes || [];
 const popularProducts = productData.value?.products?.nodes || [];
 
+const mainosVideo = ref<HTMLVideoElement | null>(null);
+const isMainosMuted = ref(true);
+
+function toggleMainosSound() {
+  const video = mainosVideo.value;
+  if (!video) return;
+  video.muted = !video.muted;
+  isMainosMuted.value = video.muted;
+  if (!video.muted) video.play().catch(() => {});
+}
 
 useSeoMeta({
   title: `Etusivu`,
@@ -25,8 +35,19 @@ useSeoMeta({
   <main>
     <section class="shock-intro-section bg-black py-10 px-4">
       <div class="shock-intro">
-        <img src="/THINK1.webp" alt="tv" class="shock-tv" loading="eager" />
+        <img src="/THINK.png" alt="tv" class="shock-tv" loading="eager" />
         <img src="/Shockbliss.png" :alt="siteName" class="shock-sb-text" />
+
+        <div class="shock-mainos-wrapper">
+          <video ref="mainosVideo" src="/output_sb_mainos.mp4" class="shock-mainos-video" autoplay loop muted playsinline></video>
+          <button
+            type="button"
+            class="shock-mainos-sound-toggle"
+            :aria-label="isMainosMuted ? 'Laita mainosvideon ääni päälle' : 'Mykistä mainosvideo'"
+            @click="toggleMainosSound">
+            {{ isMainosMuted ? '🔇' : '🔊' }}
+          </button>
+        </div>
         <img src="/shockbliss.gif" alt="Static screen" class="shock-static-gif" loading="lazy" />
 
         <!-- Desktop Navigation Column -->
@@ -94,6 +115,45 @@ useSeoMeta({
   z-index: 1;
 }
 
+/* Sits in the upper TV screen, same framing as .shock-static-gif below it */
+.shock-mainos-wrapper {
+  position: absolute;
+  left: 9.5%;
+  top: 7%;
+  width: 65%;
+  z-index: 1;
+}
+
+.shock-mainos-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.shock-mainos-sound-toggle {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.shock-mainos-sound-toggle:hover {
+background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 215, 1) 100%);}
+
 /* --- Desktop Navigation --- */
 .shock-button-column {
   position: absolute;
@@ -152,7 +212,7 @@ useSeoMeta({
 .shock-mobile-menu {
   display: none; /* Hidden on desktop */
   position: absolute;
-  left: 80%;
+  left: 79%;
   top: 33%;
   width: 50px;
   z-index: 10;
@@ -160,13 +220,13 @@ useSeoMeta({
 
 .shock-mobile-text {
   position: absolute;
-  top: -20px; /* Places the text right above the button */
+  top: -17px; /* Places the text right above the button */
   left: 50%;
   transform: translateX(-50%);
   color: #bc13fe;
-  text-shadow: 0 0 5px #9d00ff, 0 0 10px #9d00ff;
+  text-shadow: 0 0 2px #9d00ff, 0 0 2px #9d00ff;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: normal;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -192,6 +252,12 @@ useSeoMeta({
 
   .shock-sb-text {
     top: -20px;
+  }
+
+  .shock-mainos-wrapper {
+    width: 63%;
+    left: 10%;
+    top: 8.2%;
   }
 }
 </style>
