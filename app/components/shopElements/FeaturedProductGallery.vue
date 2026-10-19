@@ -34,7 +34,7 @@ const productLink = computed(() => `/product/${props.product.slug}`);
           :alt="image.altText || product.name || ''"
           :title="image.title || product.name"
           :loading="index === 0 ? 'eager' : 'lazy'"
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+          sizes="sm:50vw md:33vw lg:25vw"
           class="w-full h-auto rounded-xl transition-transform duration-300 group-hover:scale-[1.02]" />
         <span
           class="absolute inset-0 flex items-end rounded-xl bg-gradient-to-t from-black/40 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
