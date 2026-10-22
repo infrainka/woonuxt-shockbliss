@@ -39,7 +39,7 @@ useSeoMeta({
         <img src="/Shockbliss.png" :alt="siteName" class="shock-sb-text" />
 
         <div class="shock-mainos-wrapper">
-          <video ref="mainosVideo" src="/output_sb_mainos.mp4" class="shock-mainos-video" autoplay loop muted playsinline></video>
+          <video ref="mainosVideo" src="/output_mainos3.mp4" class="w-full h-full object-cover " autoplay loop muted playsinline></video>
           <button
             type="button"
             class="shock-mainos-sound-toggle"
@@ -118,18 +118,18 @@ useSeoMeta({
 /* Sits in the upper TV screen, same framing as .shock-static-gif below it */
 .shock-mainos-wrapper {
   position: absolute;
-  left: 9.5%;
+  left: 8.5%;
   top: 7%;
-  width: 65%;
+  width: 66%;
   z-index: 1;
 }
 
 .shock-mainos-video {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   overflow: hidden;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .shock-mainos-sound-toggle {
@@ -256,7 +256,7 @@ background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 21
 
   .shock-mainos-wrapper {
     width: 63%;
-    left: 10%;
+    left: 10.5%;
     top: 8.2%;
   }
 }
