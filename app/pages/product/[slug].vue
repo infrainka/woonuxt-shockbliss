@@ -190,6 +190,9 @@ const priceTarget = computed<ProductDetail | Variation>(() => activeVariation.va
 // the first gallery image is used as the main display image.
 const productImage = computed(() => product.value?.image || product.value?.galleryImages?.nodes?.[0] || null);
 const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
+// Passed to the gallery so each variation's own photo (e.g. per "kuosi"/pattern) can be
+// surfaced as its own thumbnail and matched up with the selected attribute.
+const productVariations = computed<Variation[]>(() => product.value?.variations?.nodes ?? []);
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
 
@@ -352,7 +355,8 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           :main-image="productImage"
           :gallery="productGallery"
           :node="displayProduct"
-          :active-variation="activeVariation" />
+          :active-variation="activeVariation"
+          :variations="productVariations" />
         <NuxtImg
           v-else
           class="relative aspect-square w-full min-w-0 rounded-xl object-cover skeleton"

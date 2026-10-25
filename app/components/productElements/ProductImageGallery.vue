@@ -12,6 +12,9 @@ const props = defineProps({
   gallery: { type: Object as PropType<Gallery>, required: true },
   node: { type: Object as PropType<Product | Variation>, required: true },
   activeVariation: { type: Object as PropType<Variation | null>, default: null },
+  // All product variations (e.g. one per "kuosi"/pattern), used so each variation's own
+  // photo shows up as a selectable/labelled thumbnail and can be matched to the active selection.
+  variations: { type: Array as PropType<Variation[]>, default: () => [] },
 });
 
 const primaryImage = computed<ImageFragment>(() => ({
@@ -23,10 +26,36 @@ const primaryImage = computed<ImageFragment>(() => ({
 
 const imageToShow = ref<ImageFragment>(primaryImage.value);
 
-const galleryImages = computed<ImageFragment[]>(() => {
-  // Add the primary image to the start of the gallery and remove duplicates
-  return [primaryImage.value, ...(props.gallery.nodes || [])].filter((img, index, self) => index === self.findIndex((t) => t?.databaseId === img?.databaseId));
+// Maps a variation's image databaseId to a readable label built from that variation's
+// attributes (e.g. "Keijukainen"), so the matching thumbnail can be identified by pattern.
+const variationLabelByImageId = computed<Record<number, string>>(() => {
+  const map: Record<number, string> = {};
+  for (const variationNode of props.variations) {
+    const imageId = variationNode?.image?.databaseId;
+    if (!imageId || map[imageId]) continue;
+    const labels = (variationNode.attributes?.nodes || []).map((attr) => attr?.label || attr?.value).filter((label): label is string => Boolean(label));
+    if (labels.length) map[imageId] = labels.join(', ');
+  }
+  return map;
 });
+
+const galleryImages = computed<ImageFragment[]>(() => {
+  // Add the primary image, the product gallery and every variation's own image (e.g. one
+  // per "kuosi"/pattern) to the start of the gallery and remove duplicates
+  const variationImages: ImageFragment[] = props.variations
+    .map((variationNode) => variationNode?.image)
+    .filter((img): img is NonNullable<typeof img> => Boolean(img?.sourceUrl))
+    .map((img) => ({ sourceUrl: img.sourceUrl, srcSet: null, altText: img.altText, title: img.title, databaseId: img.databaseId }));
+  return [primaryImage.value, ...(props.gallery.nodes || []), ...variationImages].filter(
+    (img, index, self) => index === self.findIndex((t) => t?.databaseId === img?.databaseId),
+  );
+});
+
+const imageLabel = (galleryImg: ImageFragment): string => {
+  const variationLabel = galleryImg.databaseId ? variationLabelByImageId.value[galleryImg.databaseId] : undefined;
+  if (!variationLabel) return galleryImg.altText || props.node.name || '';
+  return `${props.node.name} – ${variationLabel}`;
+};
 
 const changeImage = (image: ImageFragment) => {
   if (image) imageToShow.value = image;
@@ -50,10 +79,14 @@ const changeImageByOffset = (offset: number) => {
 watch(
   () => props.activeVariation,
   (newVal) => {
-    if (newVal?.image) {
-      const foundImage = galleryImages.value.find((img) => img.sourceUrl && img.sourceUrl === newVal.image?.sourceUrl);
-      if (foundImage) imageToShow.value = foundImage;
-    }
+    const variationImage = newVal?.image;
+    if (!variationImage) return;
+    // Match by databaseId rather than sourceUrl: the gallery and variation image fields
+    // request different WordPress image sizes, so their sourceUrl strings never line up.
+    const foundImage = galleryImages.value.find((img) => img.databaseId && variationImage.databaseId && img.databaseId === variationImage.databaseId);
+    changeImage(
+      foundImage || { sourceUrl: variationImage.sourceUrl, srcSet: null, altText: variationImage.altText, title: variationImage.title, databaseId: variationImage.databaseId },
+    );
   },
 );
 
@@ -88,8 +121,8 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
         :width="imgWidth"
         :height="imgWidth"
         sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
-        :alt="imageToShow.altText || node.name"
-        :title="imageToShow.title || node.name"
+        :alt="imageLabel(imageToShow)"
+        :title="imageLabel(imageToShow)"
         :src="imageToShow.sourceUrl || FALLBACK_IMG"
         :preload="{ fetchPriority: 'high' }"
         :img-attrs="{ class: 'h-full w-full object-cover object-top' }" />
@@ -113,20 +146,21 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
       </button>
     </div>
 
-    <div v-if="gallery.nodes.length" :class="thumbnailListClasses">
+    <div v-if="galleryImages.length > 1" :class="thumbnailListClasses">
       <button
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
         :class="thumbnailButtonClasses(galleryImg)"
         type="button"
-        :aria-label="`Show image for ${node.name}`"
+        :title="imageLabel(galleryImg)"
+        :aria-label="`Show image for ${imageLabel(galleryImg)}`"
         :aria-pressed="galleryImg.databaseId === imageToShow.databaseId"
         @click="changeImage(galleryImg)">
         <NuxtPicture
           :width="160"
           :height="160"
           :src="galleryImg.sourceUrl || FALLBACK_IMG"
-          :alt="galleryImg.altText || node.name"
+          :alt="imageLabel(galleryImg)"
           loading="lazy"
           :img-attrs="{ class: 'h-full w-full object-contain' }" />
       </button>
