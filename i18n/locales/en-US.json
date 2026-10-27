@@ -1,0 +1,31 @@
+{
+  "general": {
+    "home": "Start",
+    "products": "Shop",
+    "about": "About"
+  },
+  "site": {
+    "shortDescription": "Shockbliss. Wear art. Be art.",
+    "description": "Shockbliss is a bold, artful online store where the products may change, but the style stays. Each product is designed and handmade."
+  },
+  "accessibility": {
+    "unmuteVideo": "Unmute the promotional video",
+    "muteVideo": "Mute the promotional video"
+  },
+  "productDescriptions": {
+    "shockbliss-fanny-pack": {
+      "description": "<p>This stylish, practical bag has it all:</p><ul><li>Water-resistant material</li><li>Pockets and compartments to keep your belongings organized</li><li>Eye-catching patterns</li><li>Detachable strap</li><li>Lightweight</li><li>Handmade</li></ul><p>These bags are inspired by repurposed fabrics and abstract photographs taken of them.</p>"
+    }
+  },
+  "topbar": {
+    "socials": "SOCIALS"
+  },
+  "footer": {
+    "copyright": "Copyright 2026 Shockbliss | All rights reserved."
+  },
+  "shop": {
+    "collection": "Collection | Collections",
+    "saleProductsOnly": "Sale items only",
+    "viewProduct": "View product"
+  }
+}

@@ -85,7 +85,10 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
 
-  css: [resolve('./app/assets/css/main.css')],
+  // main.css has been moved to and is now maintained in the extending project's own layer
+  // (app/assets/css/main.css, loaded via the root nuxt.config.ts) so it can be edited there
+  // without touching this base theme. Do not re-add a css entry here — doing so would load
+  // Tailwind (and these utility overrides) twice when this layer is extended.
 
   runtimeConfig: {
     public: {
@@ -157,7 +160,7 @@ export default defineNuxtConfig({
   i18n: {
     locales: [
       { code: 'fi_FI', file: 'fi-FI.json', name: 'Suomi 🇫🇮' },
-      // en_US disabled until translations are complete — re-add { code: 'en_US', file: 'en-US.json', name: 'English 🇺🇸' } when ready
+      { code: 'en_US', file: 'en-US.json', name: 'English 🇺🇸' },
     ],
     langDir: 'locales',
     defaultLocale: 'fi_FI',

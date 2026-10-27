@@ -9,7 +9,7 @@ const { openCookieSettings } = useCookieConsent();
       
       <div class="flex flex-col items-center md:items-start text-center md:text-left max-w-lg mx-auto md:mx-0">
         <Logo />
-        <WebsiteShortDescription class="mt-4 text-sm leading-relaxed" />
+        <p class="mt-4 text-sm leading-relaxed">{{ $t('site.description') }}</p>
       </div>
 
       <hr class="border-shock-purple/30" />

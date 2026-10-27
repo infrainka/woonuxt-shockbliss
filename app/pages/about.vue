@@ -6,22 +6,22 @@ const { t } = useI18n();
 // e.g. '/images/team/inka.webp' and '/images/team/ani.webp'.
 const founders = computed(() => [
   {
-    key: 'inka',
-    title: t('aboutPage.founders.inka.title'),
-    name: t('aboutPage.founders.inka.name'),
-    bio: t('aboutPage.founders.inka.bio'),
-    email: t('aboutPage.founders.inka.email'),
-    phone: t('aboutPage.founders.inka.phone'),
-    image: '/images/placeholder.jpg',
-  },
-  {
     key: 'ani',
     title: t('aboutPage.founders.ani.title'),
     name: t('aboutPage.founders.ani.name'),
     bio: t('aboutPage.founders.ani.bio'),
     email: t('aboutPage.founders.ani.email'),
     phone: t('aboutPage.founders.ani.phone'),
-    image: '/images/placeholder.jpg',
+    image: '/ani.png',
+  },
+  {
+    key: 'inka',
+    title: t('aboutPage.founders.inka.title'),
+    name: t('aboutPage.founders.inka.name'),
+    bio: t('aboutPage.founders.inka.bio'),
+    email: t('aboutPage.founders.inka.email'),
+    phone: t('aboutPage.founders.inka.phone'),
+    image: '/inka-w-isr.png',
   },
 ]);
 
@@ -50,7 +50,7 @@ useSeoMeta({
           <h3 class="founder-title">{{ founder.title }}</h3>
 
           <div class="founder-image-wrap">
-            <NuxtImg :src="founder.image" :alt="founder.name" width="200" height="200" loading="lazy" class="founder-image" />
+            <NuxtImg :src="founder.image" :alt="founder.name" width="400" height="400" loading="lazy" class="founder-image" />
           </div>
 
           <div class="info-box">
@@ -106,7 +106,7 @@ useSeoMeta({
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-  max-width: 700px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -124,8 +124,8 @@ useSeoMeta({
 }
 
 .founder-image-wrap {
-  width: 180px;
-  height: 180px;
+  width: 300px;
+  height: 300px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);

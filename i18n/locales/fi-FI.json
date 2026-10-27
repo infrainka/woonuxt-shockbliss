@@ -1,8 +1,8 @@
 {
   "general": {
     "viewAll": "Kaikki tuotteet",
-    "home": "Start",
-    "products": "Shop",
+    "home": "Aloitus",
+    "products": "Kauppa",
     "contact": "Ota yhteyttä",
     "menu": "Valikko",
     "clear": "Tyhjennä",
@@ -50,6 +50,14 @@
     "processingPaymentMessage": "Käsittelemme maksuasi turvallisesti. Tämä voi kestää hetken...",
     "processingOrderMessage": "Vahvistamme tilaustasi kaupan kanssa. Ole hyvä ja odota...",
     "doNotCloseWindow": "Älä sulje tai päivitä tätä ikkunaa."
+  },
+  "site": {
+    "shortDescription": "Shockbliss. Pue taidetta, ole taide.",
+    "description": "Shockbliss on rohkean esteettinen verkkokauppa, jossa tuotteet vaihtelevat mutta tyyli pysyy. Tuotteet suunnitellaan ja valmistetaan käsityönä."
+  },
+  "accessibility": {
+    "unmuteVideo": "Laita mainosvideon ääni päälle",
+    "muteVideo": "Mykistä mainosvideo"
   },
   "hero": {
     "title1": "Näyttäviä ja kestäviä",

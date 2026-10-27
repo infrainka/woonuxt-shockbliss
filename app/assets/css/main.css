@@ -1,0 +1,232 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/*
+ * Tailwind's automatic content detection doesn't reliably pick up the woonuxt_base
+ * layer's own components/pages now that it's extended by this project, so its
+ * utility classes (e.g. the Cart drawer, CookieConsent, MobileMenu) would be missing
+ * from the generated CSS. Explicitly register both layers' source files to fix that.
+ * NOTE: this must stay in THIS file (the one with `@import 'tailwindcss'`) — Tailwind
+ * only honors @source in the stylesheet that owns the tailwindcss import, so declaring
+ * it from the project-level override CSS (app/assets/css/shockbliss-theme.css) does NOT
+ * work in production builds, even though it can appear to work in dev due to caching.
+ */
+@source '../../components';
+@source '../../pages';
+@source '../../../woonuxt_base/app/components';
+@source '../../../woonuxt_base/app/pages';
+
+@layer utilities {
+  .text-black:not(:hover),
+  [class*='text-gray-']:not(:hover),
+  [class*='text-slate-']:not(:hover),
+  [class*='text-zinc-']:not(:hover),
+  [class*='text-neutral-']:not(:hover),
+  [class*='text-stone-']:not(:hover) {
+    color: white !important;
+  }
+
+  /* Allow text-gray-900 to stay dark */
+  .text-gray-900 {
+    color: rgb(17 24 39) !important;
+  }
+
+  /* Force red hovers to show */
+  .hover\:text-red-500:hover {
+    color: rgb(239 68 68) !important;
+  }
+
+  /* Featured product description (FeaturedProductGallery): keep it white even while
+     hovering over the text itself, instead of falling back to Tailwind's muted
+     text-gray-600 (which is unreadable on the black background). */
+  .text-gray-600.prose {
+    color: white !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af !important;
+  }
+
+  input[class*='text-'],
+  textarea[class*='text-'],
+  select[class*='text-'] {
+    color: #111827 !important;
+  }
+
+  #price-from,
+  #price-to,
+  #product-search-input {
+    color: #111827 !important;
+  }
+
+  #price-from::placeholder,
+  #price-to::placeholder {
+    color: #9ca3af !important;
+  }
+
+  .cart-panel .text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .cart-panel .text-gray-800 {
+    color: #1f2937 !important;
+  }
+
+  .cart-panel .text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .cart-panel .text-gray-500 {
+    color: #6b7280 !important;
+  }
+
+  .cart-panel .text-gray-400 {
+    color: #9ca3af !important;
+  }
+
+  .site-footer .text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .site-footer .text-gray-700 {
+    color: white !important;
+  }
+
+  .site-footer .text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .cart-panel .text-black,
+  .checkout-container .text-black,
+  .order-receipt-container .text-black {
+    color: black !important;
+  }
+
+  .cart-panel .text-gray-900,
+  .checkout-container .text-gray-900,
+  .order-receipt-container .text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .cart-panel .text-gray-800,
+  .checkout-container .text-gray-800,
+  .order-receipt-container .text-gray-800 {
+    color: #1f2937 !important;
+  }
+
+    .cart-panel .text-gray-700,
+  .checkout-container .text-gray-800,
+  .order-receipt-container .text-gray-700 {
+    color: #1f2937 !important;
+  }
+
+  .cart-panel .text-gray-600,
+  .checkout-container .text-gray-600,
+  .order-receipt-container .text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .cart-panel .text-gray-500,
+  .checkout-container .text-gray-500,
+  .order-receipt-container .text-gray-500 {
+    color: #6b7280 !important;
+  }
+
+  .cart-panel .text-gray-400,
+  .checkout-container .text-gray-400,
+  .order-receipt-container .text-gray-400 {
+    color: #9ca3af !important;
+  }
+}
+
+/* Center container */
+.container {
+  @apply mx-auto px-4 md:px-12 max-w-360;
+}
+
+@theme {
+  /* Primary Color Shades */
+  --color-primary: #9B1003;
+  --color-primary-light: color-mix(in oklab, var(--color-primary) 85%, white);
+  --color-primary-dark: color-mix(in oklab, var(--color-primary) 85%, black);
+
+  /* Spacing for Safe Areas */
+  --spacing-safe: env(safe-area-inset-bottom);
+}
+
+/* Class for no slider */
+.no-slider {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+}
+
+@layer components {
+  .select {
+    @apply bg-white border rounded-md border-gray-300 hover:bg-gray-50 focus:z-20 appearance-none px-4 py-2 text-base leading-6 text-gray-900;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: center right 10px;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+
+  .wn-form input[type='text'],
+  .wn-form input[type='email'],
+  .wn-form input[type='tel'],
+  .wn-form input[type='password'],
+  .wn-form textarea,
+  .wn-form select {
+    @apply bg-gray-50 border rounded-md border-gray-300 shadow-inner w-full py-2 px-4 text-base text-gray-900 leading-6 outline-none transition-colors;
+    @apply focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30;
+  }
+
+  .wn-form select {
+    @apply appearance-none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: center right 10px;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+
+  .wn-form label {
+    @apply inline-block leading-loose text-sm text-gray-700;
+  }
+
+  .wn-form input::placeholder,
+  .wn-form textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  .wn-form input:read-only,
+  .wn-form textarea:read-only {
+    @apply bg-gray-100 border-gray-200 text-gray-900 shadow-none cursor-not-allowed;
+  }
+
+  .wn-form input:read-only:focus,
+  .wn-form input:read-only:focus-visible,
+  .wn-form textarea:read-only:focus,
+  .wn-form textarea:read-only:focus-visible {
+    @apply border-gray-200 ring-0;
+  }
+
+  .wn-form input:disabled,
+  .wn-form textarea:disabled,
+  .wn-form select:disabled {
+    @apply bg-gray-100 border-gray-200 text-gray-400 shadow-none cursor-not-allowed opacity-70;
+  }
+
+  .wn-form input.has-error,
+  .wn-form textarea.has-error {
+    @apply border-red-500;
+  }
+
+  .wn-form input[aria-invalid='true'],
+  .wn-form textarea[aria-invalid='true'],
+  .wn-form select[aria-invalid='true'] {
+    @apply border-red-500 ring-2 ring-red-500/25;
+  }
+}

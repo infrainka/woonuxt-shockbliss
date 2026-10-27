@@ -6,6 +6,7 @@ const props = defineProps({
 });
 
 const { FALLBACK_IMG } = useHelpers();
+const localizedCopy = useLocalizedProductCopy(() => props.product);
 
 // Combine the featured image (if any) with the gallery images set in WordPress, removing
 // duplicates. This product has no dedicated featured image set, only gallery images, so the
@@ -23,7 +24,7 @@ const productLink = computed(() => `/product/${props.product.slug}`);
     <div class="max-w-3xl">
       <h1 class="text-3xl font-sesmibold md:text-4xl">{{ product.name }}</h1>
       <ProductPrice v-if="product.regularPrice" class="mt-3 text-xl" :sale-price="product.salePrice" :regular-price="product.regularPrice" />
-      <div v-if="product.description" class="mt-4 text-gray-600 prose max-w-none" v-html="product.description"></div>
+      <div v-if="localizedCopy.description" class="mt-4 text-gray-600 prose max-w-none" v-html="localizedCopy.description"></div>
       <Button :to="productLink" icon="ion:arrow-forward-outline" icon-position="right" class="mt-6">{{ $t('shop.viewProduct') }}</Button>
     </div>
 

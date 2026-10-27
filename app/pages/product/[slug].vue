@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { StockStatusEnum, ProductTypesEnum, type AddToCartInput, type ProductAttributeInput } from '#gql/default';
-import type { ExternalProduct, ProductDetail, Variation, VariationAttribute } from '#types/gql';
+import type { ExternalProduct, Product, ProductDetail, Variation, VariationAttribute } from '#types/gql';
 
 const route = useRoute();
 const { storeSettings } = useAppConfig();
@@ -12,6 +12,16 @@ const slug = route.params.slug as string;
 
 const { data, error } = await useAsyncGql('getProduct', { slug, frontEndUrl });
 const product = ref<ProductDetail | null>(data.value?.product ?? null);
+const localizedCopy = useLocalizedProductCopy(() => product.value);
+const localizedProduct = computed<Product | null>(() =>
+  product.value
+    ? ({
+        ...product.value,
+        description: localizedCopy.value.description,
+        shortDescription: localizedCopy.value.shortDescription,
+      } as Product)
+    : null,
+);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
@@ -392,7 +402,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
             </div>
           </div>
 
-          <div class="mb-8" v-html="product.shortDescription || product.description"></div>
+          <div class="mb-8" v-html="localizedCopy.shortDescription"></div>
 
           <hr class="border-gray-300" />
 
@@ -456,8 +466,8 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         </div>
       </div>
       <!-- CHANGED: was v-if="product.description || product.reviews" -->
-      <div v-if="product.description || storeSettings.showReviews" class="my-32">
-        <ProductTabs :product />
+      <div v-if="localizedCopy.description || storeSettings.showReviews" class="my-32">
+        <ProductTabs v-if="localizedProduct" :product="localizedProduct" />
 
         <!-- Hook: After product tabs -->
         <HookOutlet name="product.tabs.after" :ctx="{ product }" as="div" />

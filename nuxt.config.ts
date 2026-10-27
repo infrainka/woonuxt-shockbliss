@@ -8,7 +8,11 @@ export default defineNuxtConfig({
 
   components: [{ path: './components', pathPrefix: false }],
 
-  css: [resolve('./app/assets/css/shockbliss-theme.css')],
+  // main.css owns the Tailwind import (and the woonuxt_base utility-color overrides, now
+  // customized for this project) now that it's in this layer; shockbliss-theme.css layers
+  // the brand-specific styling on top. woonuxt_base/nuxt.config.ts no longer loads its own
+  // copy of main.css, so Tailwind and these overrides are only generated once.
+  css: [resolve('./app/assets/css/main.css'), resolve('./app/assets/css/shockbliss-theme.css')],
 
   app: {
     head: {
@@ -36,11 +40,18 @@ export default defineNuxtConfig({
     },
   },
 
-  // Register this layer's own fi-FI translations (i18n/locales/fi-FI.json) so they are
+  // Register this layer's own fi-FI and en-US translations (i18n/locales/*.json) so they are
   // merged with - and take priority over - the base theme's translations of the same locale.
-  // Without this, @nuxtjs/i18n only loads woonuxt_base/i18n/locales/fi-FI.json and edits
+  // Without this, @nuxtjs/i18n only loads woonuxt_base/i18n/locales/*.json and edits
   // here are never picked up.
   i18n: {
-    locales: [{ code: 'fi_FI', file: 'fi-FI.json' }],
+    // Product descriptions contain trusted, repository-authored HTML rendered with v-html.
+    compilation: {
+      strictMessage: false,
+    },
+    locales: [
+      { code: 'fi_FI', file: 'fi-FI.json' },
+      { code: 'en_US', file: 'en-US.json' },
+    ],
   },
 });

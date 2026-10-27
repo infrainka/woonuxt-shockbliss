@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ProductsOrderByEnum } from '#gql/default';
-const { siteName, description, shortDescription, siteImage } = useAppConfig();
+const { siteName, siteImage } = useAppConfig();
+const { t } = useI18n();
 
 const [{ data }, { data: productData }] = await Promise.all([
   useAsyncGql('getProductCategories', { first: 6 }),
@@ -22,10 +23,10 @@ function toggleMainosSound() {
 }
 
 useSeoMeta({
-  title: `Etusivu`,
+  title: t('general.home'),
   ogTitle: siteName,
-  description: description,
-  ogDescription: shortDescription,
+  description: t('site.description'),
+  ogDescription: t('site.shortDescription'),
   ogImage: siteImage,
   twitterCard: `summary_large_image`,
 });
@@ -43,7 +44,7 @@ useSeoMeta({
           <button
             type="button"
             class="shock-mainos-sound-toggle"
-            :aria-label="isMainosMuted ? 'Laita mainosvideon ääni päälle' : 'Mykistä mainosvideo'"
+            :aria-label="isMainosMuted ? $t('accessibility.unmuteVideo') : $t('accessibility.muteVideo')"
             @click="toggleMainosSound">
             {{ isMainosMuted ? '🔇' : '🔊' }}
           </button>
@@ -52,14 +53,14 @@ useSeoMeta({
 
         <!-- Desktop Navigation Column -->
         <div class="shock-button-column">
-          <NuxtLink to="/" class="shock-nav-button"><span class="shock-nav-button-text">Start</span></NuxtLink>
-          <NuxtLink to="/products" class="shock-nav-button"><span class="shock-nav-button-text">Shop</span></NuxtLink>
-          <NuxtLink to="/about" class="shock-nav-button"><span class="shock-nav-button-text">Tietoa</span></NuxtLink>
+          <NuxtLink to="/" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.home') }}</span></NuxtLink>
+          <NuxtLink to="/products" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.products') }}</span></NuxtLink>
+          <NuxtLink to="/about" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.about') }}</span></NuxtLink>
         </div>
 
         <!-- Mobile Navigation Menu Button -->
         <div class="shock-mobile-menu">
-          <span class="shock-mobile-text">Menu</span>
+          <span class="shock-mobile-text">{{ $t('general.menu') }}</span>
           <MenuTrigger class="!mr-0" />
         </div>
       </div>
