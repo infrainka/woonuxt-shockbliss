@@ -1,32 +1,41 @@
 <script lang="ts" setup>
-import { ProductsOrderByEnum } from '#gql/default';
 const { siteName, siteImage } = useAppConfig();
 const { t } = useI18n();
 
-const [{ data }, { data: productData }] = await Promise.all([
-  useAsyncGql('getProductCategories', { first: 6 }),
-  useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.Popularity }),
-]);
-
-const productCategories = data.value?.productCategories?.nodes || [];
-const popularProducts = productData.value?.products?.nodes || [];
-
+const tvImage = ref<HTMLImageElement | null>(null);
+const isTvReady = ref(false);
 const mainosVideo = ref<HTMLVideoElement | null>(null);
 const isMainosMuted = ref(true);
 
-function toggleMainosSound() {
+function revealTvMedia() {
+  const image = tvImage.value;
+  if (!image?.complete || !image.naturalWidth || isTvReady.value) return;
+  isTvReady.value = true;
+}
+
+onMounted(revealTvMedia);
+
+async function toggleMainosSound() {
   const video = mainosVideo.value;
   if (!video) return;
   video.muted = !video.muted;
   isMainosMuted.value = video.muted;
-  if (!video.muted) video.play().catch(() => {});
+  if (!video.muted) {
+    try {
+      await video.play();
+    } catch (error) {
+      video.muted = true;
+      isMainosMuted.value = true;
+      console.error('Unable to play the homepage video with sound.', error);
+    }
+  }
 }
 
 useSeoMeta({
-  title: t('general.home'),
+  title: () => t('general.home'),
   ogTitle: siteName,
-  description: t('site.description'),
-  ogDescription: t('site.shortDescription'),
+  description: () => t('site.description'),
+  ogDescription: () => t('site.shortDescription'),
   ogImage: siteImage,
   twitterCard: `summary_large_image`,
 });
@@ -36,11 +45,32 @@ useSeoMeta({
   <main>
     <section class="shock-intro-section bg-black py-10 px-4">
       <div class="shock-intro">
-        <img src="/THINK.png" alt="tv" class="shock-tv" loading="eager" />
-        <img src="/Shockbliss.png" :alt="siteName" class="shock-sb-text" />
+        <img
+          ref="tvImage"
+          src="/tv-800.webp"
+          srcset="/tv-480.webp 480w, /tv-800.webp 800w, /tv-1080.webp 1080w"
+          sizes="(max-width: 831px) calc(100vw - 72px), 760px"
+          width="1080"
+          height="1920"
+          alt="tv"
+          class="shock-tv"
+          loading="eager"
+          fetchpriority="high"
+          @load="revealTvMedia" />
+        <img
+          src="/shockbliss-logo-320.webp"
+          srcset="/shockbliss-logo-160.webp 160w, /shockbliss-logo-320.webp 320w, /shockbliss-logo-480.webp 480w, /shockbliss-logo-786.webp 786w"
+          sizes="(max-width: 831px) 33vw, 264px"
+          width="786"
+          height="420"
+          :alt="siteName"
+          class="shock-sb-text" />
 
-        <div class="shock-mainos-wrapper">
-          <video ref="mainosVideo" src="/output_mainos3.mp4" class="w-full h-full object-cover " autoplay loop muted playsinline></video>
+        <div v-if="isTvReady" class="shock-mainos-wrapper">
+          <video ref="mainosVideo" class="shock-mainos-video" width="800" height="800" autoplay loop muted playsinline>
+            <source src="/mainos-480.mp4" type="video/mp4" media="(max-width: 767px)" />
+            <source src="/output_mainos3.mp4" type="video/mp4" />
+          </video>
           <button
             type="button"
             class="shock-mainos-sound-toggle"
@@ -49,13 +79,29 @@ useSeoMeta({
             {{ isMainosMuted ? '🔇' : '🔊' }}
           </button>
         </div>
-        <img src="/shockbliss.gif" alt="Static screen" class="shock-static-gif" loading="lazy" />
+        <video
+          v-if="isTvReady"
+          src="/shockbliss-static.mp4"
+          class="shock-static-video"
+          width="540"
+          height="540"
+          autoplay
+          loop
+          muted
+          playsinline
+          aria-hidden="true"></video>
 
         <!-- Desktop Navigation Column -->
         <div class="shock-button-column">
-          <NuxtLink to="/" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.home') }}</span></NuxtLink>
-          <NuxtLink to="/products" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.products') }}</span></NuxtLink>
-          <NuxtLink to="/about" class="shock-nav-button"><span class="shock-nav-button-text">{{ $t('general.about') }}</span></NuxtLink>
+          <NuxtLink to="/" class="shock-nav-button"
+            ><span class="shock-nav-button-text">{{ $t('general.home') }}</span></NuxtLink
+          >
+          <NuxtLink to="/products" class="shock-nav-button"
+            ><span class="shock-nav-button-text">{{ $t('general.products') }}</span></NuxtLink
+          >
+          <NuxtLink to="/about" class="shock-nav-button"
+            ><span class="shock-nav-button-text">{{ $t('general.about') }}</span></NuxtLink
+          >
         </div>
 
         <!-- Mobile Navigation Menu Button -->
@@ -104,7 +150,7 @@ useSeoMeta({
   z-index: 2;
 }
 
-.shock-static-gif {
+.shock-static-video {
   position: absolute;
   left: 9.5%;
   top: 51%;
@@ -116,7 +162,7 @@ useSeoMeta({
   z-index: 1;
 }
 
-/* Sits in the upper TV screen, same framing as .shock-static-gif below it */
+/* Sits in the upper TV screen, above the static animation. */
 .shock-mainos-wrapper {
   position: absolute;
   left: 8.5%;
@@ -153,7 +199,8 @@ useSeoMeta({
 }
 
 .shock-mainos-sound-toggle:hover {
-background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 215, 1) 100%);}
+  background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 215, 1) 100%);
+}
 
 /* --- Desktop Navigation --- */
 .shock-button-column {
@@ -198,7 +245,10 @@ background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 21
 .shock-nav-button-text {
   position: absolute;
   color: #bc13fe;
-  text-shadow: 0 0 5px #9d00ff, 0 0 10px #9d00ff, 0 0 20px #9d00ff;
+  text-shadow:
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 20px #9d00ff;
   /* Dark purple outline so the glowing text stays legible against bright backgrounds */
   -webkit-text-stroke: 1px #2d004d;
   paint-order: stroke fill;
@@ -225,7 +275,9 @@ background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 21
   left: 50%;
   transform: translateX(-50%);
   color: #bc13fe;
-  text-shadow: 0 0 2px #9d00ff, 0 0 2px #9d00ff;
+  text-shadow:
+    0 0 2px #9d00ff,
+    0 0 2px #9d00ff;
   font-size: 11px;
   font-weight: normal;
   text-transform: uppercase;
@@ -234,7 +286,7 @@ background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(215, 215, 21
 
 /* Override positioning specifically for the mobile button to prevent nth-child interference */
 .shock-mobile-menu .shock-mobile-nav-button {
-  position: relative; 
+  position: relative;
   top: 0;
   border: none;
   cursor: pointer;

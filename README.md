@@ -46,6 +46,20 @@ Project uses `npm` and `package-lock.json`. GraphQL types are regenerated automa
 * **Lint / auto-fix:** `npm run lint` / `npm run lint:fix`
 * **Format / check formatting:** `npm run format` / `npm run format:check`
 
+## Homepage media
+
+The homepage uses responsive `tv-*.webp` and `shockbliss-logo-*.webp` images from
+[`public/`](./public). Keep their aspect ratios unchanged when replacing artwork.
+The TV image has high fetch priority and explicit dimensions; the videos and
+sound button are mounted only after that image has loaded successfully.
+
+`shockbliss-static.mp4` replaces the large animated GIF without removing its
+animation. `mainos-480.mp4` is the mobile advertising video, while desktop uses
+`output_mainos3.mp4`. Both advertising versions retain sound. Regenerate the
+derived media when updating the PNG, GIF, or original video: WebP images use
+quality 82 (TV) / 85 (logo); MP4 derivatives use H.264, CRF 26, and fast-start,
+with 540px static animation and 480px mobile video (AAC audio at 64 kbps).
+
 ## License
 
 GNU GPLv3 - see [LICENSE](./LICENSE).

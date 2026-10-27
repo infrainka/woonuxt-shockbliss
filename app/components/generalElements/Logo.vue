@@ -4,7 +4,14 @@ const { siteName } = useAppConfig();
 
 <template>
   <NuxtLink to="/" class="inline-flex items-center gap-2 shock-logo">
-    <img src="/Shockbliss.png" :alt="siteName" class="object-contain h-10" />
+    <img
+      src="/shockbliss-logo-160.webp"
+      srcset="/shockbliss-logo-160.webp 160w, /shockbliss-logo-320.webp 320w"
+      sizes="75px"
+      width="786"
+      height="420"
+      :alt="siteName"
+      class="object-contain h-10 w-auto" />
   </NuxtLink>
 </template>
 
