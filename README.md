@@ -48,7 +48,8 @@ Project uses `npm` and `package-lock.json`. GraphQL types are regenerated automa
 
 ## Homepage media
 
-The homepage uses responsive `tv-*.webp` and `shockbliss-logo-*.webp` images from
+The homepage uses responsive `tv-*.avif` and `shockbliss-logo-*.avif` images with
+WebP fallbacks from
 [`public/`](./public). Keep their aspect ratios unchanged when replacing artwork.
 The TV image has high fetch priority and explicit dimensions; the videos and
 sound button are mounted only after that image has loaded successfully.
@@ -57,8 +58,13 @@ sound button are mounted only after that image has loaded successfully.
 animation. `mainos-480.mp4` is the mobile advertising video, while desktop uses
 `output_mainos3.mp4`. Both advertising versions retain sound. Regenerate the
 derived media when updating the PNG, GIF, or original video: WebP images use
-quality 82 (TV) / 85 (logo); MP4 derivatives use H.264, CRF 26, and fast-start,
+quality 82 (TV) / 85 (logo), and AVIF images use quality 45; MP4 derivatives use H.264, CRF 26, and fast-start,
 with 540px static animation and 480px mobile video (AAC audio at 64 kbps).
+
+Roboto and Righteous are self-hosted as WOFF2 Latin and Latin Extended subsets in
+[`public/fonts/`](./public/fonts), with their Open Font Licenses included.
+The theme declares these fonts with `font-display: swap`; the primary Roboto
+subset is preloaded without a blocking third-party stylesheet.
 
 ## License
 

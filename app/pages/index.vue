@@ -45,26 +45,45 @@ useSeoMeta({
   <main>
     <section class="shock-intro-section bg-black py-10 px-4">
       <div class="shock-intro">
-        <img
-          ref="tvImage"
-          src="/tv-800.webp"
-          srcset="/tv-480.webp 480w, /tv-800.webp 800w, /tv-1080.webp 1080w"
-          sizes="(max-width: 831px) calc(100vw - 72px), 760px"
-          width="1080"
-          height="1920"
-          alt="tv"
-          class="shock-tv"
-          loading="eager"
-          fetchpriority="high"
-          @load="revealTvMedia" />
-        <img
-          src="/shockbliss-logo-320.webp"
-          srcset="/shockbliss-logo-160.webp 160w, /shockbliss-logo-320.webp 320w, /shockbliss-logo-480.webp 480w, /shockbliss-logo-786.webp 786w"
-          sizes="(max-width: 831px) 33vw, 264px"
-          width="786"
-          height="420"
-          :alt="siteName"
-          class="shock-sb-text" />
+        <picture>
+          <source
+            type="image/avif"
+            srcset="/tv-360.avif 360w, /tv-480.avif 480w, /tv-640.avif 640w, /tv-800.avif 800w, /tv-1080.avif 1080w"
+            sizes="(max-width: 831px) calc(100vw - 72px), 760px" />
+          <img
+            ref="tvImage"
+            src="/tv-800.webp"
+            srcset="/tv-480.webp 480w, /tv-800.webp 800w, /tv-1080.webp 1080w"
+            sizes="(max-width: 831px) calc(100vw - 72px), 760px"
+            width="1080"
+            height="1920"
+            alt="tv"
+            class="shock-tv"
+            loading="eager"
+            fetchpriority="high"
+            @load="revealTvMedia" />
+        </picture>
+        <picture>
+          <source
+            type="image/avif"
+            srcset="
+              /shockbliss-logo-80.avif   80w,
+              /shockbliss-logo-160.avif 160w,
+              /shockbliss-logo-240.avif 240w,
+              /shockbliss-logo-320.avif 320w,
+              /shockbliss-logo-480.avif 480w,
+              /shockbliss-logo-786.avif 786w
+            "
+            sizes="(max-width: 831px) calc(33vw - 10.56px), 264px" />
+          <img
+            src="/shockbliss-logo-320.webp"
+            srcset="/shockbliss-logo-160.webp 160w, /shockbliss-logo-320.webp 320w, /shockbliss-logo-480.webp 480w, /shockbliss-logo-786.webp 786w"
+            sizes="(max-width: 831px) calc(33vw - 10.56px), 264px"
+            width="786"
+            height="420"
+            :alt="siteName"
+            class="shock-sb-text" />
+        </picture>
 
         <div v-if="isTvReady" class="shock-mainos-wrapper">
           <video ref="mainosVideo" class="shock-mainos-video" width="800" height="800" autoplay loop muted playsinline>
