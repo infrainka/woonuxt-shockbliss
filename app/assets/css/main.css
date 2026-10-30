@@ -43,6 +43,23 @@
     color: white !important;
   }
 
+  /* Cart page (/cart) item list sits directly on the dark page background (unlike the
+     cart-panel order-summary card, which is a light box), so the product name's
+     text-gray-900 needs to stay light here instead of following the site-wide rule
+     above that keeps text-gray-900 dark for use on light panels/cards. */
+  .cart-items-list .text-gray-900:not(:hover) {
+    color: white !important;
+  }
+
+  /* Quantity stepper (-/+ buttons and number) always sits on its own white background,
+     in both the cart drawer and the /cart page item list, so its icons/number must stay
+     dark. This must come after the .cart-items-list rule above so it wins the tie on
+     text-gray-900 when the stepper is nested inside that dark-text item list. */
+  .quantity-input-panel .text-gray-900:not(:hover),
+  .quantity-input-panel .text-gray-700:not(:hover) {
+    color: #1f2937 !important;
+  }
+
   input::placeholder,
   textarea::placeholder {
     color: #9ca3af !important;

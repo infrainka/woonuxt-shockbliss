@@ -36,8 +36,8 @@ const isHome = computed(() => route.path === '/');
       </div>
       <MainMenu v-if="!isHome" class="items-center hidden gap-6 text-sm text-white lg:flex lg:px-4" />
       <div class="flex justify-end items-center w-40 flex-1 ml-auto gap-4 md:gap-6">
-        <ProductSearch class="hidden sm:inline-flex max-w-80 w-[60%]" />
-        <SearchTrigger />
+                  <LangSwitcher class="ml-4" />
+
         <div class="flex gap-4 items-center">
           <CartTrigger />
         </div>

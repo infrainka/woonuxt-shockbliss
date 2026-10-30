@@ -24,7 +24,6 @@ const { openCookieSettings } = useCookieConsent();
             {{ $t('footer.cookieSettings') }}
           </button>
 
-          <LangSwitcher class="ml-4" />
         </div>
         
       </div>

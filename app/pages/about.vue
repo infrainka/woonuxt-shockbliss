@@ -189,7 +189,6 @@ useSeoMeta({
 .sb-form-title {
   text-align: center;
   color: #ffffff;
-  font-family: 'Lora', serif;
   font-weight: 400;
   margin-bottom: 30px;
   letter-spacing: 2px;
