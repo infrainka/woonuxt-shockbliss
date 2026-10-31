@@ -487,6 +487,6 @@ watch(
 }
 
 .attribute-selections input[type='radio']:checked ~ span {
-  @apply outline-2 outline-[#bc13fe];
+  @apply outline-2 outline-[#fe019a];
 }
 </style>

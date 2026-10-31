@@ -6,11 +6,11 @@ const { cart, toggleCart, isCartMutating } = useCart();
   <div class="shock-cart-panel cart-panel fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden shadow-lg">
     <Icon
       name="ion:close-outline"
-      class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer hover:bg-white/20 text-shock-purple"
+      class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer hover:bg-white/20 text-shock-pink"
       size="34"
       @click="toggleCart(false)" />
 
-    <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 text-shock-purple hover:bg-red-400 hover:text-white" />
+    <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 text-shock-pink hover:bg-red-400 hover:text-white" />
 
     <div class="mt-8 text-center font-semibold shock-cart-heading">
       {{ $t('shop.cart') }}
@@ -80,12 +80,12 @@ const { cart, toggleCart, isCartMutating } = useCart();
 
 .shock-cart-heading {
   font-family: 'Righteous', cursive;
-  color: #bc13fe;
+  color: #fe019a;
   text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.8),
     0 2px 4px rgba(0, 0, 0, 0.5),
-    0 0 5px #9d00ff,
-    0 0 10px #9d00ff,
-    0 0 20px #9d00ff;
+    0 0 5px #fe019a,
+    0 0 10px #fe019a,
+    0 0 20px #fe019a;
 }
 </style>

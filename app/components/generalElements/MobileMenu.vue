@@ -34,12 +34,12 @@ const { toggleMobileMenu } = useHelpers();
   font-size: 1.2em;
   text-decoration: none;
   text-transform: uppercase;
-  color: #bc13fe;
+  color: #fe019a;
   text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.8),
     0 2px 4px rgba(0, 0, 0, 0.5),
-    0 0 5px #9d00ff,
-    0 0 10px #9d00ff,
-    0 0 20px #9d00ff;
+    0 0 5px #fe019a,
+    0 0 10px #fe019a,
+    0 0 20px #fe019a;
 }
 </style>

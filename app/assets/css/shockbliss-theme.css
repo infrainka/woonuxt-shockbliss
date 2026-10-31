@@ -47,8 +47,7 @@
 @theme {
   --color-shock-gold: #e6af4b;
   --color-shock-pink: #fe019a;
-  --color-shock-purple: #bc13fe;
-  --color-shock-glow: #9d00ff;
+  --color-shock-glow: #fe019a;
   --color-shock-violet: #973be8;
 }
 
@@ -119,7 +118,7 @@ h1 {
 
 /* Neon link/button treatment used across header, footer and menus */
 .shock-neon-link {
-  color: var(--color-shock-purple);
+  color: var(--color-shock-pink);
   text-shadow: 0 0 5px var(--color-shock-glow), 0 0 10px var(--color-shock-glow);
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }

@@ -267,13 +267,13 @@ useSeoMeta({
 
 .shock-nav-button-text {
   position: absolute;
-  color: #bc13fe;
+  color: #fe019a;
   text-shadow:
-    0 0 5px #9d00ff,
-    0 0 10px #9d00ff,
-    0 0 20px #9d00ff;
-  /* Dark purple outline so the glowing text stays legible against bright backgrounds */
-  -webkit-text-stroke: 1px #2d004d;
+    0 0 5px #fe019a,
+    0 0 10px #fe019a,
+    0 0 20px #fe019a;
+  /* Dark magenta outline so the glowing text stays legible against bright backgrounds */
+  -webkit-text-stroke: 1px #4c002e;
   paint-order: stroke fill;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -297,10 +297,10 @@ useSeoMeta({
   top: -17px; /* Places the text right above the button */
   left: 50%;
   transform: translateX(-50%);
-  color: #bc13fe;
+  color: #fe019a;
   text-shadow:
-    0 0 2px #9d00ff,
-    0 0 2px #9d00ff;
+    0 0 2px #fe019a,
+    0 0 2px #fe019a;
   font-size: 11px;
   font-weight: normal;
   text-transform: uppercase;

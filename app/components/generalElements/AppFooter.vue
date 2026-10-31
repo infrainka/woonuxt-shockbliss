@@ -4,7 +4,7 @@ const { openCookieSettings } = useCookieConsent();
 </script>
 
 <template>
-  <footer class="site-footer bg-black text-white py-12 mt-12 order-last border-t border-shock-purple/30">
+  <footer class="site-footer bg-black text-white py-12 mt-12 order-last border-t border-shock-pink/30">
     <div class="container flex flex-col gap-8">
       
       <div class="flex flex-col items-center md:items-start text-center md:text-left max-w-lg mx-auto md:mx-0">
@@ -12,7 +12,7 @@ const { openCookieSettings } = useCookieConsent();
         <p class="mt-4 text-sm leading-relaxed">{{ $t('site.description') }}</p>
       </div>
 
-      <hr class="border-shock-purple/30" />
+      <hr class="border-shock-pink/30" />
 
       <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
         

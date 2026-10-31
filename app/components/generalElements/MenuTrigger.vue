@@ -58,7 +58,7 @@ const { toggleMobileMenu, isShowingMobileMenu } = useHelpers();
 .shock-hamburger--open .shock-hamburger-bar--top {
   top: 21px;
   transform: rotate(45deg);
-  background: var(--color-shock-purple);
+  background: var(--color-shock-pink);
 }
 
 .shock-hamburger--open .shock-hamburger-bar--mid {
@@ -68,6 +68,6 @@ const { toggleMobileMenu, isShowingMobileMenu } = useHelpers();
 .shock-hamburger--open .shock-hamburger-bar--bot {
   top: 21px;
   transform: rotate(-45deg);
-  background: var(--color-shock-purple);
+  background: var(--color-shock-pink);
 }
 </style>

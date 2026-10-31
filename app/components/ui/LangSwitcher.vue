@@ -59,7 +59,7 @@ const currentLocale = computed(() => locales.value.find((loc) => loc.code === lo
 }
 
 .shock-lang-switcher:focus-visible {
-  outline: 2px solid var(--color-shock-purple);
+  outline: 2px solid var(--color-shock-pink);
   outline-offset: 2px;
 }
 

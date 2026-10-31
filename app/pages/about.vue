@@ -120,7 +120,7 @@ useSeoMeta({
 .founder-title {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--color-shock-purple);
+  color: var(--color-shock-pink);
 }
 
 .founder-image-wrap {

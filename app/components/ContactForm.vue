@@ -80,7 +80,7 @@ const handleSubmit = (event) => {
    on the global --color-shock-* theme variables) so this component's look never
    depends on the Tailwind theme file having been processed. */
 .shock-form-container {
-  --shock-primary-glow: #9d00ff;
+  --shock-primary-glow: #fe019a;
   --shock-cyan-glow: #00f0ff;
 
   max-width: 600px;
@@ -92,7 +92,7 @@ const handleSubmit = (event) => {
   box-shadow:
     0 0 5px var(--shock-primary-glow),
     0 0 15px var(--shock-primary-glow),
-    inset 0 0 5px rgba(157, 0, 255, 0.5);
+    inset 0 0 5px rgba(254, 1, 154, 0.5);
   backdrop-filter: blur(10px);
   transition:
     transform 0.3s ease-in-out,
@@ -105,7 +105,7 @@ const handleSubmit = (event) => {
     0 0 10px var(--shock-primary-glow),
     0 0 30px var(--shock-primary-glow),
     0 0 50px var(--shock-cyan-glow),
-    inset 0 0 10px rgba(157, 0, 255, 0.5);
+    inset 0 0 10px rgba(254, 1, 154, 0.5);
 }
 
 .shock-form-title {
@@ -204,7 +204,7 @@ const handleSubmit = (event) => {
 }
 
 .shock-error {
-  background-color: rgba(157, 0, 255, 0.1);
+  background-color: rgba(254, 1, 154, 0.1);
   border: 1px solid var(--shock-primary-glow);
   color: #e57373;
 }
