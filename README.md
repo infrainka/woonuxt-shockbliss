@@ -48,7 +48,7 @@ Project uses `npm` and `package-lock.json`. GraphQL types are regenerated automa
 
 ## Homepage media
 
-The homepage uses responsive `tv-*.avif` and `shockbliss-teksti-*.avif` images with
+The homepage uses responsive `tv-*.avif` and `sb-teksti-*.avif` images with
 WebP fallbacks from
 [`public/`](./public). Keep their aspect ratios unchanged when replacing artwork.
 The TV image has high fetch priority and explicit dimensions; the videos and

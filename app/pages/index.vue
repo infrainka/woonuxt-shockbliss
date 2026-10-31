@@ -67,17 +67,17 @@ useSeoMeta({
           <source
             type="image/avif"
             srcset="
-              /shockbliss-teksti-80.avif   80w,
-              /shockbliss-teksti-160.avif 160w,
-              /shockbliss-teksti-240.avif 240w,
-              /shockbliss-teksti-320.avif 320w,
-              /shockbliss-teksti-480.avif 480w,
-              /shockbliss-teksti-786.avif 786w
+              /sb-teksti-80.avif   80w,
+              /sb-teksti-160.avif 160w,
+              /sb-teksti-240.avif 240w,
+              /sb-teksti-320.avif 320w,
+              /sb-teksti-480.avif 480w,
+              /sb-teksti-786.avif 786w
             "
             sizes="(max-width: 831px) calc(33vw - 10.56px), 264px" />
           <img
-            src="/shockbliss-teksti-320.webp"
-            srcset="/shockbliss-teksti-160.webp 160w, /shockbliss-teksti-320.webp 320w, /shockbliss-teksti-480.webp 480w, /shockbliss-teksti-786.webp 786w"
+            src="/sb-teksti-320.webp"
+            srcset="/sb-teksti-160.webp 160w, /sb-teksti-320.webp 320w, /sb-teksti-480.webp 480w, /sb-teksti-786.webp 786w"
             sizes="(max-width: 831px) calc(33vw - 10.56px), 264px"
             width="786"
             height="524"
