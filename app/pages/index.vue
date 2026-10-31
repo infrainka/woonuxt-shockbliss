@@ -67,20 +67,20 @@ useSeoMeta({
           <source
             type="image/avif"
             srcset="
-              /shockbliss-logo-80.avif   80w,
-              /shockbliss-logo-160.avif 160w,
-              /shockbliss-logo-240.avif 240w,
-              /shockbliss-logo-320.avif 320w,
-              /shockbliss-logo-480.avif 480w,
-              /shockbliss-logo-786.avif 786w
+              /shockbliss-teksti-80.avif   80w,
+              /shockbliss-teksti-160.avif 160w,
+              /shockbliss-teksti-240.avif 240w,
+              /shockbliss-teksti-320.avif 320w,
+              /shockbliss-teksti-480.avif 480w,
+              /shockbliss-teksti-786.avif 786w
             "
             sizes="(max-width: 831px) calc(33vw - 10.56px), 264px" />
           <img
-            src="/shockbliss-logo-320.webp"
-            srcset="/shockbliss-logo-160.webp 160w, /shockbliss-logo-320.webp 320w, /shockbliss-logo-480.webp 480w, /shockbliss-logo-786.webp 786w"
+            src="/shockbliss-teksti-320.webp"
+            srcset="/shockbliss-teksti-160.webp 160w, /shockbliss-teksti-320.webp 320w, /shockbliss-teksti-480.webp 480w, /shockbliss-teksti-786.webp 786w"
             sizes="(max-width: 831px) calc(33vw - 10.56px), 264px"
             width="786"
-            height="420"
+            height="524"
             :alt="siteName"
             class="shock-sb-text" />
         </picture>
@@ -165,8 +165,12 @@ useSeoMeta({
   width: 33%;
   height: auto;
   left: 30%;
-  top: -35px;
+  top: -60px;
   z-index: 2;
+  /* Brightens and shifts the lettering's muted tones toward pink instead of gray */
+  /* Layered drop-shadows give the lettering an extruded, 3D "pop" off the TV screen */
+  filter: brightness(1.1) saturate(1.5) drop-shadow(3px 4px 0 rgba(15, 0, 8, 0.85))
+    drop-shadow(6px 8px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 14px rgba(255, 110, 90, 0.3));
 }
 
 .shock-static-video {
