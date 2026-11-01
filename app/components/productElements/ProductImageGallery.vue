@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useSwipe } from '@vueuse/core';
 import type { ImageFragment, Product, Variation } from '#types/gql';
 
 const { FALLBACK_IMG } = useHelpers();
@@ -24,7 +25,9 @@ const primaryImage = computed<ImageFragment>(() => ({
   databaseId: props.mainImage.databaseId,
 }));
 
-const imageToShow = ref<ImageFragment>(primaryImage.value);
+// The gallery is a "card deck": every image is a card, the one at currentIndex is on top/active,
+// and its neighbours peek out from behind it on each side.
+const currentIndex = ref(0);
 
 // Maps a variation's image databaseId to a readable label built from that variation's
 // attributes (e.g. "Keijukainen"), so the matching thumbnail can be identified by pattern.
@@ -51,29 +54,30 @@ const galleryImages = computed<ImageFragment[]>(() => {
   );
 });
 
+const imageToShow = computed<ImageFragment>(() => galleryImages.value[currentIndex.value] ?? primaryImage.value);
+
 const imageLabel = (galleryImg: ImageFragment): string => {
   const variationLabel = galleryImg.databaseId ? variationLabelByImageId.value[galleryImg.databaseId] : undefined;
   if (!variationLabel) return galleryImg.altText || props.node.name || '';
   return `${props.node.name} – ${variationLabel}`;
 };
 
-const changeImage = (image: ImageFragment) => {
-  if (image) imageToShow.value = image;
+const findImageIndex = (databaseId?: number | null): number => {
+  if (!databaseId) return -1;
+  return galleryImages.value.findIndex((img) => img.databaseId === databaseId);
 };
 
-const changeImageByOffset = (offset: number) => {
-  const images = galleryImages.value;
-  if (images.length <= 1) return false;
+// Accepts anything with a databaseId (a full gallery ImageFragment, or just a variation's
+// smaller image field) since matching into galleryImages only ever needs that id.
+const changeImage = (image?: { databaseId?: number | null } | null) => {
+  const index = findImageIndex(image?.databaseId);
+  if (index !== -1) currentIndex.value = index;
+};
 
-  const currentIndex = images.findIndex((image) => image.databaseId === imageToShow.value.databaseId);
-  const fallbackIndex = offset > 0 ? 0 : images.length - 1;
-  const nextIndex = currentIndex === -1 ? fallbackIndex : (currentIndex + offset + images.length) % images.length;
-  const nextImage = images[nextIndex];
-  if (nextImage) {
-    changeImage(nextImage);
-    return true;
-  }
-  return false;
+const changeIndexByOffset = (offset: number) => {
+  const total = galleryImages.value.length;
+  if (total <= 1) return;
+  currentIndex.value = (currentIndex.value + offset + total) % total;
 };
 
 watch(
@@ -83,12 +87,63 @@ watch(
     if (!variationImage) return;
     // Match by databaseId rather than sourceUrl: the gallery and variation image fields
     // request different WordPress image sizes, so their sourceUrl strings never line up.
-    const foundImage = galleryImages.value.find((img) => img.databaseId && variationImage.databaseId && img.databaseId === variationImage.databaseId);
-    changeImage(
-      foundImage || { sourceUrl: variationImage.sourceUrl, srcSet: null, altText: variationImage.altText, title: variationImage.title, databaseId: variationImage.databaseId },
-    );
+    // Every variation image is already included in galleryImages (see above), so it's always found.
+    changeImage(variationImage);
   },
 );
+
+// How many cards peek out on each side of the active one: just the active card plus one neighbour peeking from behind on each side.
+const DECK_RADIUS = 1;
+// Every card (including the active one) sits in the same box, inset from the deck's edges
+// (inset-[8%] below). That reserved margin is what makes the fan visible: it's the gap the
+// active photo leaves clear for its neighbours' rotated/shifted corners to peek into, instead
+// of the neighbours being entirely hidden behind an edge-to-edge active image.
+const DECK_LAYOUT: Record<number, { x: number; y: number; rotate: number; scale: number; opacity: number }> = {
+  0: { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 },
+  1: { x: 18, y: 5, rotate: 7, scale: 0.95, opacity: 0.9 },
+};
+
+type DeckCard = { img: ImageFragment; index: number; offset: number; clickable: boolean };
+
+// Shortest signed distance from currentIndex to index, wrapping around both ends of the
+// gallery (so swiping past the last image loops to the first one, and vice versa).
+const circularOffset = (index: number, total: number): number => {
+  let diff = index - currentIndex.value;
+  if (diff > total / 2) diff -= total;
+  if (diff < -total / 2) diff += total;
+  return diff;
+};
+
+const deckCards = computed<DeckCard[]>(() => {
+  const total = galleryImages.value.length;
+  if (!total) return [];
+  return galleryImages.value
+    .map((img, index) => {
+      const offset = circularOffset(index, total);
+      return { img, index, offset, clickable: Math.abs(offset) === 1 };
+    })
+    .filter((card) => Math.abs(card.offset) <= DECK_RADIUS);
+});
+
+const cardStyle = (offset: number) => {
+  const abs = Math.min(Math.abs(offset), DECK_RADIUS);
+  const sign = Math.sign(offset);
+  const layout = DECK_LAYOUT[abs] ?? DECK_LAYOUT[0] ?? { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 };
+  return {
+    transform: `translate(${sign * layout.x}%, ${layout.y}%) rotate(${sign * layout.rotate}deg) scale(${layout.scale})`,
+    opacity: layout.opacity,
+    zIndex: DECK_RADIUS + 1 - abs,
+  };
+};
+
+const deckRef = ref<HTMLElement | null>(null);
+useSwipe(deckRef, {
+  onSwipeEnd(_event, direction) {
+    if (direction === 'left') changeIndexByOffset(1);
+    else if (direction === 'right') changeIndexByOffset(-1);
+  },
+});
+
 
 const imgWidth = 640;
 
@@ -115,33 +170,47 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
 
 <template>
   <div :class="galleryRootClasses">
-    <div class="relative group aspect-square w-full min-w-0 overflow-hidden rounded-xl bg-gray-100">
-      <SaleBadge :node class="absolute text-base top-4 right-4" />
-      <NuxtPicture
-        :width="imgWidth"
-        :height="imgWidth"
-        sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
-        :alt="imageLabel(imageToShow)"
-        :title="imageLabel(imageToShow)"
-        :src="imageToShow.sourceUrl || FALLBACK_IMG"
-        :preload="{ fetchPriority: 'high' }"
-        :img-attrs="{ class: 'h-full w-full object-cover object-top' }" />
+    <div ref="deckRef" class="relative group aspect-square w-full min-w-0 touch-pan-y select-none overflow-hidden rounded-xl bg-gray-50 shadow-inner">
+      <SaleBadge :node class="absolute z-10 text-base top-4 right-4" />
+
+      <button
+        v-for="card in deckCards"
+        :key="card.img.databaseId ?? card.index"
+        type="button"
+        tabindex="-1"
+        :aria-hidden="card.offset !== 0 ? 'true' : undefined"
+        class="deck-card absolute inset-[8%] overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none"
+        :class="card.clickable ? 'cursor-pointer' : 'pointer-events-none cursor-default'"
+        :style="cardStyle(card.offset)"
+        @click="card.clickable && changeIndexByOffset(card.offset > 0 ? 1 : -1)">
+        <NuxtPicture
+          :width="card.offset === 0 ? imgWidth : 400"
+          :height="card.offset === 0 ? imgWidth : 400"
+          :sizes="card.offset === 0 ? '412px:100vw sm:100vw md:50vw lg:50vw xl:640px' : undefined"
+          :quality="card.offset === 0 ? undefined : 65"
+          :alt="imageLabel(card.img)"
+          :title="imageLabel(card.img)"
+          :src="card.img.sourceUrl || FALLBACK_IMG"
+          :loading="card.offset === 0 ? undefined : 'lazy'"
+          :preload="card.offset === 0 ? { fetchPriority: 'high' } : undefined"
+          :img-attrs="{ class: 'h-full w-full object-cover object-top rounded-2xl' }" />
+      </button>
 
       <button
         v-if="galleryImages.length > 1"
-        class="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
+        class="absolute left-4 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
         type="button"
         :aria-label="`Previous image for ${node.name}`"
-        @click="changeImageByOffset(-1)">
+        @click="changeIndexByOffset(-1)">
         <Icon name="ion:chevron-back-outline" size="24" />
       </button>
 
       <button
         v-if="galleryImages.length > 1"
-        class="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
+        class="absolute right-4 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
         type="button"
         :aria-label="`Next image for ${node.name}`"
-        @click="changeImageByOffset(1)">
+        @click="changeIndexByOffset(1)">
         <Icon name="ion:chevron-forward-outline" size="24" />
       </button>
     </div>

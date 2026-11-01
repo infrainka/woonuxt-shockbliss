@@ -8,7 +8,10 @@ interface Props {
 }
 
 const { attributes, defaultAttributes, variations } = defineProps<Props>();
-const emit = defineEmits(['attrs-changed']);
+// 'option-picked' fires only for direct user clicks (not the initial/URL-restored selection
+// below), so the page can react to it (e.g. scroll the gallery into view on mobile) without
+// also firing on first load.
+const emit = defineEmits(['attrs-changed', 'option-picked']);
 
 const selections = ref<Record<string, string>>({});
 
@@ -246,6 +249,8 @@ const resolveInvalidSelections = (source: Record<string, string>, options: { all
 };
 
 const handleSelectionChange = (changedKey?: string) => {
+  emit('option-picked');
+
   if (!variations?.length) {
     emitSelection();
     return;

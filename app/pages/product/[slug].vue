@@ -206,6 +206,21 @@ const productVariations = computed<Variation[]>(() => product.value?.variations?
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
 
+// On mobile the gallery sits above the attribute selectors, so picking an option (e.g. a
+// "kuosi"/pattern) can happen while it's scrolled out of view. Smoothly bring it back into
+// view so the user sees the image the deck just switched to.
+const galleryEl = ref<{ $el: HTMLElement } | null>(null);
+const scrollToGalleryOnMobile = (): void => {
+  if (!import.meta.client || !window.matchMedia('(max-width: 767px)').matches) return;
+  nextTick(() => {
+    const target = galleryEl.value?.$el;
+    if (!target) return;
+    const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+};
+
 const selectProductInput = computed<AddToCartInput>(() => {
   const input: AddToCartInput = {
     productId: displayProduct.value.databaseId,
@@ -361,6 +376,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,34rem)] lg:gap-24">
         <ProductImageGallery
           v-if="productImage"
+          ref="galleryEl"
           class="relative w-full min-w-0"
           :main-image="productImage"
           :gallery="productGallery"
@@ -413,7 +429,8 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
               :attributes="product.attributes.nodes"
               :default-attributes="defaultAttributes"
               :variations="product.variations.nodes"
-              @attrs-changed="updateSelectedVariations" />
+              @attrs-changed="updateSelectedVariations"
+              @option-picked="scrollToGalleryOnMobile" />
             <p v-if="isVariableProduct && missingSelectionWarning" class="mb-4 text-sm font-medium text-red-600" role="alert">
               {{ missingSelectionWarning }}
             </p>
