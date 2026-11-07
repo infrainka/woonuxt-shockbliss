@@ -81,7 +81,6 @@ const handleSubmit = (event) => {
    depends on the Tailwind theme file having been processed. */
 .shock-form-container {
   --shock-primary-glow: #fe019a;
-  --shock-cyan-glow: #00f0ff;
 
   max-width: 600px;
   margin: 50px auto;
@@ -104,14 +103,12 @@ const handleSubmit = (event) => {
   box-shadow:
     0 0 10px var(--shock-primary-glow),
     0 0 30px var(--shock-primary-glow),
-    0 0 50px var(--shock-cyan-glow),
     inset 0 0 10px rgba(254, 1, 154, 0.5);
 }
 
 .shock-form-title {
   text-align: center;
   margin-bottom: 25px;
-  text-shadow: 0 0 5px var(--shock-cyan-glow);
 }
 
 .shock-form-group {

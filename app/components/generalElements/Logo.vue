@@ -7,11 +7,11 @@ const { siteName } = useAppConfig();
     <picture class="inline-flex">
       <source
         type="image/avif"
-        srcset="/sb-teksti-80.avif 80w, /sb-teksti-160.avif 160w, /sb-teksti-240.avif 240w, /sb-teksti-320.avif 320w, /sb-teksti-480.avif 480w"
+        srcset="/sb-text-80.avif 80w, /sb-text-160.avif 160w, /sb-text-240.avif 240w, /sb-text-320.avif 320w, /sb-text-480.avif 480w"
         sizes="(min-width: 640px) 96px, 84px" />
       <img
-        src="/sb-teksti-320.webp"
-        srcset="/sb-teksti-160.webp 160w, /sb-teksti-320.webp 320w, /sb-teksti-480.webp 480w"
+        src="/sb-text-320.webp"
+        srcset="/sb-text-160.webp 160w, /sb-text-320.webp 320w, /sb-text-480.webp 480w"
         sizes="(min-width: 640px) 96px, 84px"
         width="786"
         height="524"
